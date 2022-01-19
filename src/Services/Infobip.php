@@ -18,9 +18,12 @@ class Infobip extends BaseSms
 
     public function __construct()
     {
-        if(empty(config('taiwan_sms.infobip.url'))) throw new \Exception('infobip need url');
-        if(empty(config('taiwan_sms.infobip.username'))) throw new \Exception('infobip need username');
-        if(empty(config('taiwan_sms.infobip.password'))) throw new \Exception('infobip need password');
+        if(empty(config('taiwan_sms.infobip.url'))) throw new InvalidSms('infobip need url');
+        if(empty(config('taiwan_sms.infobip.username'))) throw new InvalidSms('infobip need username');
+        if(empty(config('taiwan_sms.infobip.password'))) throw new InvalidSms('infobip need password');
+        if(empty($this->destination)) throw new InvalidSms('The empty destination is invalid.');
+        if(empty($this->text)) throw new InvalidSms('The empty text is invalid.');
+        if($this->isTaiwanPhoneNumber()) $this->destination = '886' . substr($this->destination, 1, 9);
 
         $configuration = (new Configuration())
             ->setHost(config('taiwan_sms.infobip.url'))
@@ -36,9 +39,6 @@ class Infobip extends BaseSms
 
     public function send(): array
     {
-        if(empty($this->destination)) throw new InvalidSms('The empty phone is invalid.');
-        if(empty($this->text)) throw new InvalidSms('The empty body is invalid.');
-        if($this->isTaiwanPhoneNumber()) $this->destination = '886' . substr($this->destination, 1, 9);
 
         $destination = (new SmsDestination())->setTo($this->destination);
         $message = (new SmsTextualMessage())

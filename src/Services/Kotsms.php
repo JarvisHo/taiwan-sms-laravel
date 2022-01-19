@@ -3,6 +3,7 @@
 namespace Jarvisho\TaiwanSmsLaravel\Services;
 
 use GuzzleHttp\Client;
+use Jarvisho\TaiwanSmsLaravel\Exceptions\InvalidSms;
 use Jarvisho\TaiwanSmsLaravel\Services\Contract\BaseSms;
 
 class Kotsms extends BaseSms
@@ -47,9 +48,12 @@ class Kotsms extends BaseSms
 
     public function __construct()
     {
-        if(empty(config('taiwan_sms.kotsms.url'))) throw new \Exception('kotsms need url');
-        if(empty(config('taiwan_sms.kotsms.username'))) throw new \Exception('kotsms need username');
-        if(empty(config('taiwan_sms.kotsms.password'))) throw new \Exception('kotsms need password');
+        if(empty(config('taiwan_sms.kotsms.url'))) throw new InvalidSms('kotsms need url');
+        if(empty(config('taiwan_sms.kotsms.username'))) throw new InvalidSms('kotsms need username');
+        if(empty(config('taiwan_sms.kotsms.password'))) throw new InvalidSms('kotsms need password');
+        if(empty($this->destination)) throw new InvalidSms('The empty destination is invalid.');
+        if(empty($this->text)) throw new InvalidSms('The empty text is invalid.');
+        if($this->isGlobalPhoneNumber()) $this->destination = '0' . substr($this->destination, 3, 9);
 
         $this->url = config('taiwan_sms.kotsms.url') .
             '?username=' . config('taiwan_sms.kotsms.username') .
@@ -120,4 +124,11 @@ class Kotsms extends BaseSms
         return $content;
     }
 
+    /**
+     * @return bool
+     */
+    public function isGlobalPhoneNumber(): bool
+    {
+        return strlen($this->destination) == 12 && substr($this->destination, 0, -9) == '886';
+    }
 }
