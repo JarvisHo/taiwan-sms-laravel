@@ -72,7 +72,7 @@ class Kotsms extends BaseSms
             config('taiwan_sms.kotsms.username'),
             config('taiwan_sms.kotsms.password'),
             $this->destination,
-            urlencode($this->text)
+            urlencode(iconv(mb_detect_encoding($this->text), "big5", $this->text))
         ];
         $this->url = sprintf(config('taiwan_sms.kotsms.url'), ...$params);
 
