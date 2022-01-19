@@ -9,6 +9,9 @@
 
 ## Example:
 ```php
+$phone = '0988123123';
+$text = '測試中文 Test ABC 123';
+
 try {
     TaiwanSms::send($phone, $text);
     
