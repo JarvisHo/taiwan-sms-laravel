@@ -21,6 +21,7 @@ abstract class BaseSms
 
     public function setDestination($destination)
     {
+        $destination = str_replace(['+', '-', ' '], '', $destination);
         $this->destination = $destination;
     }
 
