@@ -7,6 +7,7 @@ use Infobip\Configuration;
 use Infobip\Model\SmsAdvancedTextualRequest;
 use Infobip\Model\SmsDestination;
 use Infobip\Model\SmsTextualMessage;
+use Jarvisho\TaiwanSmsLaravel\Exceptions\InvalidSms;
 use Jarvisho\TaiwanSmsLaravel\Services\Contract\BaseSms;
 
 class Infobip extends BaseSms
@@ -35,6 +36,9 @@ class Infobip extends BaseSms
 
     public function send(): array
     {
+        if(empty($this->destination)) throw new InvalidSms('The empty phone is invalid.');
+        if(empty($this->text)) throw new InvalidSms('The empty body is invalid.');
+
         $destination = (new SmsDestination())->setTo($this->destination);
         $message = (new SmsTextualMessage())
             ->setFrom($this->subject)
@@ -53,5 +57,13 @@ class Infobip extends BaseSms
             'code' => 200,
             'body' => $response->getMessages()[0]->getStatus()->getDescription()
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTaiwanPhoneNumber(): bool
+    {
+        return strlen($this->destination) == 10 && substr($this->destination, 0, -8) == '09';
     }
 }
