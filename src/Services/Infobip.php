@@ -38,6 +38,7 @@ class Infobip extends BaseSms
     {
         if(empty($this->destination)) throw new InvalidSms('The empty phone is invalid.');
         if(empty($this->text)) throw new InvalidSms('The empty body is invalid.');
+        if($this->isTaiwanPhoneNumber()) $this->destination = '886' . substr($this->destination, 1, 9);
 
         $destination = (new SmsDestination())->setTo($this->destination);
         $message = (new SmsTextualMessage())
