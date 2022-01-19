@@ -31,7 +31,7 @@ class Every8d extends BaseSms
             config('taiwan_sms.every8d.username'),
             config('taiwan_sms.every8d.password'),
             $this->subject,
-            $this->text,
+            urlencode($this->text),
             $this->destination
         ];
         $this->url = sprintf(config('taiwan_sms.every8d.url'), ...$params);
