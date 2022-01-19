@@ -7,7 +7,7 @@
             "Jarvisho\\TaiwanSmsLaravel\\": "src/"
         }
     },
-    "version": "1.0.4",
+    "version": "1.0.5",
     "autoload-dev": {
         "psr-4": {
             "Jarvisho\\TaiwanSmsLaravel\\Tests\\": "tests/"
