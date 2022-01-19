@@ -1,4 +1,9 @@
-# Taiwan SMS for Laravel
+# Taiwan SMS for Laravel 
+## Supports:
+1. 簡訊王 kotsms
+2. Every8d 企業簡訊平台
+3. Infobip
+
 ## Steps:
 1. $ composer require jarvisho/taiwan-sms-laravel
 2. $ php artisan vendor:publish --provider="Jarvisho\TaiwanSmsLaravel\TaiwanSmsServiceProvider"
