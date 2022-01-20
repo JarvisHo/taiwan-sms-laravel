@@ -7,7 +7,7 @@
             "Jarvisho\\TaiwanSmsLaravel\\": "src/"
         }
     },
-    "version": "1.0.5",
+    "version": "1.1.0",
     "autoload-dev": {
         "psr-4": {
             "Jarvisho\\TaiwanSmsLaravel\\Tests\\": "tests/"
@@ -35,9 +35,6 @@
         "orchestra/testbench": "^6.24"
     },
     "scripts": {
-        "post-autoload-dump": [
-            "@php ./vendor/bin/testbench package:discover --ansi"
-        ],
         "test": "vendor/bin/pest"
     }
 }
