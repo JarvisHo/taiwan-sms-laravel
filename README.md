@@ -18,8 +18,8 @@
 ```php
 <?php
 return [
-    'primary' => 'every8d', // 主要 SMS 服務商
-    'failover' => '', // 次要(選填) 備援 SMS 服務商
+    'primary' => 'every8d', // 主要 SMS 服務商，可填寫以下擇一 every8d, kotsms, mitake, infobip
+    'failover' => '', // 次要(選填) 備援 SMS 服務商，可填寫以下擇一 every8d, kotsms, mitake, infobip
     'timeout' => 5, // 等待多久判定服務無回應，自動切換服務商或返回狀態
     'every8d' => [
         'url' => env('EVERY8D_URL', 'http://biz3.every8d.com.tw/prepaid/API21/HTTP/sendSMS.ashx?UID=%s&PWD=%s&SB=%s&MSG=%s&DEST=%s'),
