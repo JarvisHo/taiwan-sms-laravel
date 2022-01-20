@@ -1,10 +1,10 @@
 # Taiwan SMS for Laravel 台灣簡訊服務的整合套件
 ### 可自訂備援簡訊服務，當主要服務出狀況可自動切換使發送服務
 ## 可支援簡訊商 Supports:
-1. 三竹簡訊 Mitake 
-2. 簡訊王 kotsms
-3. Every8d 企業簡訊平台
-4. Infobip
+1. 三竹簡訊 Mitake https://sms.mitake.com.tw/common/index.jsp
+2. 簡訊王 kotsms https://kotsms.com.tw/index.php
+3. Every8d 互動資通 https://www.teamplus.tech/product/every8d-download/
+4. Infobip https://infobip.com/ 
 
 ## 安裝步驟 Steps:
 1. 安裝套件 $ composer require jarvisho/taiwan-sms-laravel
