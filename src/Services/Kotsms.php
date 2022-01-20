@@ -48,13 +48,13 @@ class Kotsms extends BaseSms
 
     public function __construct()
     {
-        if(empty(config('taiwan_sms.kotsms.url'))) throw new InvalidSms('kotsms need url');
-        if(empty(config('taiwan_sms.kotsms.username'))) throw new InvalidSms('kotsms need username');
-        if(empty(config('taiwan_sms.kotsms.password'))) throw new InvalidSms('kotsms need password');
+        if(empty(config('taiwan_sms.services.kotsms.url'))) throw new InvalidSms('kotsms need url');
+        if(empty(config('taiwan_sms.services.kotsms.username'))) throw new InvalidSms('kotsms need username');
+        if(empty(config('taiwan_sms.services.kotsms.password'))) throw new InvalidSms('kotsms need password');
 
-        $this->url = config('taiwan_sms.kotsms.url') .
-            '?username=' . config('taiwan_sms.kotsms.username') .
-            '&password=' . config('taiwan_sms.kotsms.password');
+        $this->url = config('taiwan_sms.services.kotsms.url') .
+            '?username=' . config('taiwan_sms.services.kotsms.username') .
+            '&password=' . config('taiwan_sms.services.kotsms.password');
 
         $this->client = new Client([
             'timeout' => config('taiwan_sms.timeout', 5),
@@ -69,12 +69,12 @@ class Kotsms extends BaseSms
         if($this->isGlobalPhoneNumber()) $this->destination = '0' . substr($this->destination, 3, 9);
 
         $params = [
-            config('taiwan_sms.kotsms.username'),
-            config('taiwan_sms.kotsms.password'),
+            config('taiwan_sms.services.kotsms.username'),
+            config('taiwan_sms.services.kotsms.password'),
             $this->destination,
             urlencode(iconv(mb_detect_encoding($this->text), "big5", $this->text))
         ];
-        $this->url = sprintf(config('taiwan_sms.kotsms.url'), ...$params);
+        $this->url = sprintf(config('taiwan_sms.services.kotsms.url'), ...$params);
 
         $response = $this->client->get($this->url);
 

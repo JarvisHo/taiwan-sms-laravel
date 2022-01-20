@@ -13,11 +13,11 @@ class Mitake extends BaseSms
 
     public function __construct()
     {
-        if(empty(config('taiwan_sms.mitake.url'))) throw new InvalidSms('mitake need url');
-        if(empty(config('taiwan_sms.mitake.username'))) throw new InvalidSms('mitake need username');
-        if(empty(config('taiwan_sms.mitake.password'))) throw new InvalidSms('mitake need password');
+        if(empty(config('taiwan_sms.services.mitake.url'))) throw new InvalidSms('mitake need url');
+        if(empty(config('taiwan_sms.services.mitake.username'))) throw new InvalidSms('mitake need username');
+        if(empty(config('taiwan_sms.services.mitake.password'))) throw new InvalidSms('mitake need password');
 
-        $this->url = config('taiwan_sms.mitake.url');
+        $this->url = config('taiwan_sms.services.mitake.url');
 
         $this->client = new Client([
             'timeout' => config('taiwan_sms.timeout', 5),
@@ -35,10 +35,10 @@ class Mitake extends BaseSms
         if($this->isGlobalPhoneNumber()) $this->destination = '0' . substr($this->destination, 3, 9);
 
         $data = [
-            'username'=> config('taiwan_sms.mitake.username'),
-            'password'=> config('taiwan_sms.mitake.password'),
+            'username'=> config('taiwan_sms.services.mitake.username'),
+            'password'=> config('taiwan_sms.services.mitake.password'),
             'dstaddr' => $this->destination,
-            'smbody' => $this->text,
+            'smbody' => iconv(mb_detect_encoding($this->text), "UTF-8", $this->text),
         ];
 
         $response = $this->client->post($this->url, $data);
@@ -49,7 +49,7 @@ class Mitake extends BaseSms
 
         return [
             'code' => $response->getStatusCode(),
-            'body' => $response->getBody()->getContents(),
+            'body' => mb_convert_encoding($response->getBody()->getContents(), 'UTF-8', 'BIG-5'),
         ];
     }
 

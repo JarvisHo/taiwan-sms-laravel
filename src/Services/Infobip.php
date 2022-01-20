@@ -18,14 +18,14 @@ class Infobip extends BaseSms
 
     public function __construct()
     {
-        if(empty(config('taiwan_sms.infobip.url'))) throw new InvalidSms('infobip need url');
-        if(empty(config('taiwan_sms.infobip.username'))) throw new InvalidSms('infobip need username');
-        if(empty(config('taiwan_sms.infobip.password'))) throw new InvalidSms('infobip need password');
+        if(empty(config('taiwan_sms.services.infobip.url'))) throw new InvalidSms('infobip need url');
+        if(empty(config('taiwan_sms.services.infobip.username'))) throw new InvalidSms('infobip need username');
+        if(empty(config('taiwan_sms.services.infobip.password'))) throw new InvalidSms('infobip need password');
 
         $configuration = (new Configuration())
-            ->setHost(config('taiwan_sms.infobip.url'))
-            ->setUsername(config('taiwan_sms.infobip.username'))
-            ->setPassword(config('taiwan_sms.infobip.password'));
+            ->setHost(config('taiwan_sms.services.infobip.url'))
+            ->setUsername(config('taiwan_sms.services.infobip.username'))
+            ->setPassword(config('taiwan_sms.services.infobip.password'));
 
         $client = new Client([
             'timeout' => config('taiwan_sms.timeout', 5),

@@ -12,9 +12,9 @@ class Every8d extends BaseSms
 
     public function __construct()
     {
-        if(empty(config('taiwan_sms.every8d.url'))) throw new InvalidSms('every8d need url');
-        if(empty(config('taiwan_sms.every8d.username'))) throw new InvalidSms('every8d need username');
-        if(empty(config('taiwan_sms.every8d.password'))) throw new InvalidSms('every8d need password');
+        if(empty(config('taiwan_sms.services.every8d.url'))) throw new InvalidSms('every8d need url');
+        if(empty(config('taiwan_sms.services.every8d.username'))) throw new InvalidSms('every8d need username');
+        if(empty(config('taiwan_sms.services.every8d.password'))) throw new InvalidSms('every8d need password');
 
         $this->client = new Client([
             'timeout' => config('taiwan_sms.timeout', 5),
@@ -29,13 +29,13 @@ class Every8d extends BaseSms
         if($this->isGlobalPhoneNumber()) $this->destination = '0' . substr($this->destination, 3, 9);
 
         $params = [
-            config('taiwan_sms.every8d.username'),
-            config('taiwan_sms.every8d.password'),
+            config('taiwan_sms.services.every8d.username'),
+            config('taiwan_sms.services.every8d.password'),
             $this->subject,
             urlencode($this->text),
             $this->destination
         ];
-        $this->url = sprintf(config('taiwan_sms.every8d.url'), ...$params);
+        $this->url = sprintf(config('taiwan_sms.services.every8d.url'), ...$params);
         $response = $this->client->request('GET', $this->url);
 
         return [
