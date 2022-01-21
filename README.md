@@ -21,25 +21,27 @@ return [
     'primary' => 'every8d', // 主要 SMS 服務商，可填寫以下擇一 every8d, kotsms, mitake, infobip
     'failover' => '', // 次要(選填) 備援 SMS 服務商，可填寫以下擇一 every8d, kotsms, mitake, infobip
     'timeout' => 5, // 等待多久判定服務無回應，自動切換服務商或返回狀態
-    'every8d' => [
-        'url' => env('EVERY8D_URL', 'http://biz3.every8d.com.tw/prepaid/API21/HTTP/sendSMS.ashx?UID=%s&PWD=%s&SB=%s&MSG=%s&DEST=%s'),
-        'username' => env('EVERY8D_USERNAME'), // 將 key 複製到專案跟目錄的 .env 裡面，並加上您的帳號，例如：EVERY8D_USERNAME=example2022
-        'password' => env('EVERY8D_PASSWORD'), // 將 key 複製到專案跟目錄的 .env 裡面，並加上您的密碼，例如：EVERY8D_USERNAME=password2022
-    ],
-    'kotsms' => [
-        'url' => env('KOTSMS_URL', 'https://api.kotsms.com.tw/kotsmsapi-1.php?username=%s&password=%s&dstaddr=%s&smbody=%s&response='),
-        'username' => env('KOTSMS_USERNAME'),
-        'password' => env('KOTSMS_PASSWORD'),
-    ],
-    'infobip' => [
-        'url' => env('INFOBIP_URL', 'https://vqlkm.api.infobip.com'),
-        'username' => env('INFOBIP_USERNAME'),
-        'password' => env('INFOBIP_PASSWORD'),
-    ],
-    'mitake' => [
-        'url' => env('MITAKE_URL', 'https://sms.mitake.com.tw/b2c/mtk/SmSend?CharsetURL=UTF-8'),
-        'username' => env('MITAKE_USERNAME'),
-        'password' => env('MITAKE_PASSWORD'),
+    'services' => [
+        'every8d' => [
+            'url' => env('EVERY8D_URL', 'http://biz3.every8d.com.tw/prepaid/API21/HTTP/sendSMS.ashx?UID=%s&PWD=%s&SB=%s&MSG=%s&DEST=%s'),
+            'username' => env('EVERY8D_USERNAME'), // 將 key 複製到專案跟目錄的 .env 裡面，並加上您的帳號，例如：EVERY8D_USERNAME=example2022
+            'password' => env('EVERY8D_PASSWORD'), // 將 key 複製到專案跟目錄的 .env 裡面，並加上您的密碼，例如：EVERY8D_USERNAME=password2022
+        ],
+        'kotsms' => [
+            'url' => env('KOTSMS_URL', 'https://api.kotsms.com.tw/kotsmsapi-1.php?username=%s&password=%s&dstaddr=%s&smbody=%s&response='),
+            'username' => env('KOTSMS_USERNAME'),
+            'password' => env('KOTSMS_PASSWORD'),
+        ],
+        'infobip' => [
+            'url' => env('INFOBIP_URL', 'https://vqlkm.api.infobip.com'),
+            'username' => env('INFOBIP_USERNAME'),
+            'password' => env('INFOBIP_PASSWORD'),
+        ],
+        'mitake' => [
+            'url' => env('MITAKE_URL', 'https://sms.mitake.com.tw/b2c/mtk/SmSend?CharsetURL=UTF-8'),
+            'username' => env('MITAKE_USERNAME'),
+            'password' => env('MITAKE_PASSWORD'),
+        ]
     ]
 ];
 ```
