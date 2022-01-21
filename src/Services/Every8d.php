@@ -24,18 +24,7 @@ class Every8d extends BaseSms
 
     public function send(): array
     {
-        if(empty($this->destination)) throw new InvalidSms('The empty destination is invalid.');
-        if(empty($this->text)) throw new InvalidSms('The empty text is invalid.');
-        if($this->isGlobalPhoneNumber()) $this->destination = '0' . substr($this->destination, 3, 9);
-
-        $params = [
-            config('taiwan_sms.services.every8d.username'),
-            config('taiwan_sms.services.every8d.password'),
-            $this->subject,
-            urlencode($this->text),
-            $this->destination
-        ];
-        $this->url = sprintf(config('taiwan_sms.services.every8d.url'), ...$params);
+        $this->prepare();
         $response = $this->client->request('GET', $this->url);
 
         return [
@@ -50,5 +39,32 @@ class Every8d extends BaseSms
     public function isGlobalPhoneNumber(): bool
     {
         return strlen($this->destination) == 12 && substr($this->destination, 0, -9) == '886';
+    }
+
+    /**
+     * @return void
+     * @throws InvalidSms
+     */
+    public function prepare(): void
+    {
+        if (empty($this->destination)) throw new InvalidSms('The empty destination is invalid.');
+        if (empty($this->text)) throw new InvalidSms('The empty text is invalid.');
+        if ($this->isGlobalPhoneNumber()) $this->destination = '0' . substr($this->destination, 3, 9);
+
+        $params = [
+            config('taiwan_sms.services.every8d.username'),
+            config('taiwan_sms.services.every8d.password'),
+            $this->subject,
+            urlencode($this->text),
+            $this->destination
+        ];
+        $this->url = sprintf(config('taiwan_sms.services.every8d.url'), ...$params);
+    }
+
+    public function test()
+    {
+        $this->prepare();
+
+        return ['url' => $this->url];
     }
 }

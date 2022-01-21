@@ -30,16 +30,7 @@ class Mitake extends BaseSms
 
     public function send(): array
     {
-        if(empty($this->destination)) throw new InvalidSms('The empty destination is invalid.');
-        if(empty($this->text)) throw new InvalidSms('The empty text is invalid.');
-        if($this->isGlobalPhoneNumber()) $this->destination = '0' . substr($this->destination, 3, 9);
-
-        $data = [
-            'username'=> config('taiwan_sms.services.mitake.username'),
-            'password'=> config('taiwan_sms.services.mitake.password'),
-            'dstaddr' => $this->destination,
-            'smbody' => iconv(mb_detect_encoding($this->text), "UTF-8", $this->text),
-        ];
+        $data = $this->prepare();
 
         $response = $this->client->post($this->url, $data);
 
@@ -60,4 +51,30 @@ class Mitake extends BaseSms
     {
         return strlen($this->destination) == 12 && substr($this->destination, 0, -9) == '886';
     }
+
+    /**
+     * @return array
+     * @throws InvalidSms
+     */
+    public function prepare(): array
+    {
+        if (empty($this->destination)) throw new InvalidSms('The empty destination is invalid.');
+        if (empty($this->text)) throw new InvalidSms('The empty text is invalid.');
+        if ($this->isGlobalPhoneNumber()) $this->destination = '0' . substr($this->destination, 3, 9);
+
+        return [
+            'username' => config('taiwan_sms.services.mitake.username'),
+            'password' => config('taiwan_sms.services.mitake.password'),
+            'dstaddr' => $this->destination,
+            'smbody' => iconv(mb_detect_encoding($this->text), "UTF-8", $this->text),
+        ];
+    }
+
+    public function test()
+    {
+        $data = $this->prepare();
+
+        return ['url' => $this->url, 'data' => http_build_query($data)];
+    }
+
 }

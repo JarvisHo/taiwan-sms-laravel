@@ -9,7 +9,7 @@ use Jarvisho\TaiwanSmsLaravel\Services\Contract\BaseSms;
 class Kotsms extends BaseSms
 {
     protected $client;
-    protected $url;
+    public $url;
 
     public const CGI_ERROR = '-1';
     public const AUTH_ERROR = '-2';
@@ -52,10 +52,6 @@ class Kotsms extends BaseSms
         if(empty(config('taiwan_sms.services.kotsms.username'))) throw new InvalidSms('kotsms need username');
         if(empty(config('taiwan_sms.services.kotsms.password'))) throw new InvalidSms('kotsms need password');
 
-        $this->url = config('taiwan_sms.services.kotsms.url') .
-            '?username=' . config('taiwan_sms.services.kotsms.username') .
-            '&password=' . config('taiwan_sms.services.kotsms.password');
-
         $this->client = new Client([
             'timeout' => config('taiwan_sms.timeout', 5),
             'connect_timeout' => config('taiwan_sms.timeout', 5),
@@ -64,17 +60,7 @@ class Kotsms extends BaseSms
 
     public function send(): array
     {
-        if(empty($this->destination)) throw new InvalidSms('The empty destination is invalid.');
-        if(empty($this->text)) throw new InvalidSms('The empty text is invalid.');
-        if($this->isGlobalPhoneNumber()) $this->destination = '0' . substr($this->destination, 3, 9);
-
-        $params = [
-            config('taiwan_sms.services.kotsms.username'),
-            config('taiwan_sms.services.kotsms.password'),
-            $this->destination,
-            urlencode(iconv(mb_detect_encoding($this->text), "big5", $this->text))
-        ];
-        $this->url = sprintf(config('taiwan_sms.services.kotsms.url'), ...$params);
+        $this->prepare();
 
         $response = $this->client->get($this->url);
 
@@ -131,5 +117,31 @@ class Kotsms extends BaseSms
     public function isGlobalPhoneNumber(): bool
     {
         return strlen($this->destination) == 12 && substr($this->destination, 0, -9) == '886';
+    }
+
+    /**
+     * @return void
+     * @throws InvalidSms
+     */
+    public function prepare(): void
+    {
+        if (empty($this->destination)) throw new InvalidSms('The empty destination is invalid.');
+        if (empty($this->text)) throw new InvalidSms('The empty text is invalid.');
+        if ($this->isGlobalPhoneNumber()) $this->destination = '0' . substr($this->destination, 3, 9);
+
+        $params = [
+            config('taiwan_sms.services.kotsms.username'),
+            config('taiwan_sms.services.kotsms.password'),
+            $this->destination,
+            urlencode(iconv(mb_detect_encoding($this->text), "big5", $this->text))
+        ];
+        $this->url = sprintf(config('taiwan_sms.services.kotsms.url'), ...$params);
+    }
+
+    public function test()
+    {
+        $this->prepare();
+
+        return ['url' => $this->url];
     }
 }

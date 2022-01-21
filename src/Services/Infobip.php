@@ -36,18 +36,7 @@ class Infobip extends BaseSms
 
     public function send(): array
     {
-        if(empty($this->destination)) throw new InvalidSms('The empty destination is invalid.');
-        if(empty($this->text)) throw new InvalidSms('The empty text is invalid.');
-        if($this->isTaiwanPhoneNumber()) $this->destination = '886' . substr($this->destination, 1, 9);
-
-
-        $destination = (new SmsDestination())->setTo($this->destination);
-        $message = (new SmsTextualMessage())
-            ->setFrom($this->subject)
-            ->setText($this->text)
-            ->setDestinations([$destination]);
-        $request = (new SmsAdvancedTextualRequest())
-            ->setMessages([$message]);
+        $request = $this->prepare();
 
         $response = $this->api->sendSmsMessage($request);
 
@@ -67,5 +56,33 @@ class Infobip extends BaseSms
     public function isTaiwanPhoneNumber(): bool
     {
         return strlen($this->destination) == 10 && substr($this->destination, 0, -8) == '09';
+    }
+
+    /**
+     * @return SmsAdvancedTextualRequest
+     * @throws InvalidSms
+     */
+    public function prepare(): SmsAdvancedTextualRequest
+    {
+        if (empty($this->destination)) throw new InvalidSms('The empty destination is invalid.');
+        if (empty($this->text)) throw new InvalidSms('The empty text is invalid.');
+        if ($this->isTaiwanPhoneNumber()) $this->destination = '886' . substr($this->destination, 1, 9);
+
+        $destination = (new SmsDestination())->setTo($this->destination);
+        $message = (new SmsTextualMessage())
+            ->setFrom($this->subject)
+            ->setText($this->text)
+            ->setDestinations([$destination]);
+        return (new SmsAdvancedTextualRequest())
+            ->setMessages([$message]);
+    }
+
+    public function test()
+    {
+        $request = $this->prepare();
+
+        return [
+            'data' => json_encode($request->getMessages()),
+        ];
     }
 }

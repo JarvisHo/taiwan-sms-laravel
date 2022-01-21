@@ -5,14 +5,14 @@ use Jarvisho\TaiwanSmsLaravel\Exceptions\InvalidSms;
 
 class TaiwanSms
 {
-    public static function send($destination, $text)
+    public static function send($destination, $text, $test = false)
     {
         try {
-            $response = self::process(self::getPrimaryClassName(), $text, $destination);
+            $response = self::process(self::getPrimaryClassName(), $text, $destination, $test);
         }catch (\Exception $exception) {
             if(empty(self::getFailoverClassName())) throw new InvalidSms($exception->getMessage());
             try {
-                $response = self::process(self::getFailoverClassName(), $text, $destination);
+                $response = self::process(self::getFailoverClassName(), $text, $destination, $test);
             }catch (\Exception $exception) {
                 throw new InvalidSms($exception->getMessage());
             }
@@ -27,11 +27,13 @@ class TaiwanSms
      * @param $destination
      * @return array
      */
-    public static function process(string $class, $text, $destination): array
+    public static function process(string $class, $text, $destination, $test = false): array
     {
         $api = new $class();
         $api->setText($text);
         $api->setDestination($destination);
+        if($test) return $api->test();
+
         return $api->send();
     }
 
