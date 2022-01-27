@@ -1,5 +1,5 @@
 # Taiwan SMS for Laravel 台灣簡訊服務的整合套件
-### 可自訂備援簡訊服務，當主要服務出狀況可自動切換使發送服務
+### 可自訂備援簡訊服務，當主要服務出狀況可自動切換備援發送服務
 ## 可支援簡訊商 Supports:
 1. 三竹簡訊 Mitake https://sms.mitake.com.tw/common/index.jsp
 2. 簡訊王 kotsms https://kotsms.com.tw/index.php
